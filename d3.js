@@ -6114,7 +6114,13 @@
           s.y += y * k;
         }
       }
-      if (k = alpha * gravity) {
+      if (typeof gravity === "function") {
+        i = -1;
+        while (++i < n) {
+          o = nodes[i];
+          gravity(o, alpha);
+        }
+      } else if (k = alpha * gravity) {
         x = size[0] / 2;
         y = size[1] / 2;
         i = -1;
@@ -6192,7 +6198,11 @@
     };
     force.gravity = function(x) {
       if (!arguments.length) return gravity;
-      gravity = +x;
+      if (typeof x === "function") {
+        gravity = x;
+      } else {
+        gravity = +x;
+      }
       return force;
     };
     force.theta = function(x) {
@@ -9232,7 +9242,6 @@
     define(d3);
   } else if (typeof module === "object" && module.exports) {
     module.exports = d3;
-  } else {
-    this.d3 = d3;
   }
+  this.d3 = d3;
 }();
